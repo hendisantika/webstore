@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en" th:replace="~{base::Layout(~{::body})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Document</title>
+</head>
+<body>
+
+<br>
+<br>
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-6 col-lg-4 mb-2">
+
+            <div class="card bg-green admin-card text-white shadowed-2">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col col-xs-6">
+
+                            <h1 class="fs-45">[(${#lists.size(users)})]</h1>
+                            <h6>Registered Users</h6>
+
+
+                        </div>
+
+                        <div class="col col-xs-6 text-end">
+
+                            <button class="btn bg-white txt-green col-12 mt-3 p-3 fw-bold" data-bs-target="#users-modal"
+                                    data-bs-toggle="modal">View
+                                Users
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-2">
+
+            <div class="card bg-orange admin-card text-white shadowed-2">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col col-xs-6">
+
+                            <h2 class="fw-bold mt-3">Products</h2>
+                            <h6 class="">Total Products: [[${#lists.size(products)}]]</h6>
+
+
+                        </div>
+
+                        <div class="col col-xs-6 text-end">
+
+                            <button class="btn bg-white txt-orange col-12 mt-3 p-3 fw-bold"
+                                    onclick="">VIEW PRODUCTS
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-2">
+
+            <div class="card bg-blue admin-card text-white shadowed-2">
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col col-xs-6">
+
+                            <h2 class="fw-bold mt-3">Categories</h2>
+                            <h6 class="">Total Categories:
+                                [[${#lists.size(categories)}]]</h6>
+
+
+                        </div>
+
+                        <div class="col col-xs-6 text-end">
+
+                            <button class="btn bg-white txt-blue col-12 mt-3 p-3 fw-bold"
+                                    onclick="categoryViewOrAdd()">View
+                                or Add
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<!-- Users Modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+     id="users-modal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="exampleModalLabel">StoreWala
+                    Users</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                        type="button"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="main-box clearfix">
+                                <div class="table-responsive">
+                                    <table class="table user-list">
+                                        <thead>
+                                        <tr>
+                                            <th><span>User</span></th>
+                                            <th><span>Created</span></th>
+                                            <th class="text-center"><span>Status</span></th>
+                                            <th><span>Email</span></th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="u :  ${users}">
+                                            <td><img
+                                                    alt=""
+                                                    src="https://bootdey.com/img/Content/avatar/avatar1.png"> <a class="user-link text-bg-color"
+                                                               href="#">[(${u.name})]</a>
+                                                <span class="user-subhead badge badge-soft-danger"
+                                                      th:if="${u.role == 'ROLE_CUSTOMER'}">CUSTOMER</span>
+                                                <span class="user-subhead badge badge-soft-primary"
+                                                      th:if="${u.role == 'ROLE_SELLER'}">SELLER</span>
+                                                <span class="user-subhead badge badge-soft-success"
+                                                      th:if="${u.role == 'ROLE_ADMIN'}">ADMIN</span></td>
+                                            <td>[(${#dates.format(u.date, 'dd-MMM-yyyy')})]</td>
+                                            <td class="text-center"><span
+                                                    class="badge"
+                                                    th:classappend="${u.isEnable ? 'badge-soft-success' : 'badge-soft-danger'}"
+                                                    th:text="${u.isEnable ? 'Not Suspended' : 'Suspended'}"></span></td>
+                                            <td><a class="text-bg-color" href="#">[(${u.email})]</a></td>
+                                            <td style="width: 20%;"><a class="table-link" href="#">
+
+
+                                            </a> <a
+                                                    class="table-link"
+                                                    th:href="${u.isEnable ? 'action?user=suspend&user_id='+u.id : 'action?user=unsuspend&user_id='+u.id}"> <span class="fa-stack"> <i
+                                                    class="fa fa-square fa-stack-2x"></i> <i class="fa fa-ban fa-stack-1x fa-inverse"
+                                                                                             rel="tooltip"
+                                                                                             th:title="${u.isEnable ? 'Suspend' : 'Unsuspend'}"></i>
+														</span>
+                                            </a> <a class="table-link danger" href="#"> <span
+                                                    class="fa-stack"> <i
+                                                    class="fa fa-square fa-stack-2x"></i> <i
+                                                    class="fa-solid fa-trash fa-stack-1x fa-inverse" rel="tooltip"
+                                                    th:onclick="|deleteUser(${u.id})|"
+                                                    title="Delete"></i>
+														</span>
+                                            </a></td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <hr>
+
+                                <ul class="pagination mb-sm-0">
+                                    <li class="page-item"><a class="page-link" href="#"><i
+                                            class="mdi mdi-chevron-left"></i></a></li>
+                                    <li class="page-item active"><a class="page-link"
+                                                                    href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item"><a class="page-link" href="#"><i
+                                            class="mdi mdi-chevron-right"></i></a></li>
+                                </ul>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Users Modal End -->
+
+
+<!-- Category Modal Add Start -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+     id="category_add" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                        type="button"></button>
+            </div>
+            <div class="modal-body">
+
+                <form action="action?category=add" method="get" th:object="${category}">
+                    <div class="mb-3">
+                        <label class="form-label" for="exampleInputEmail1">Category Title</label>
+
+                        <input name="category" type="hidden" value="addNew">
+
+                        <input class="form-control" name="title" type="text">
+                        <p class="fs-10 text-danger mt-1">Make sure the category you want to add don't exist
+                            already.</p>
+
+
+                    </div>
+
+                    <button class="btn primary-background text-white col-12" type="submit">Add Category</button>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Category Modal Add End -->
+
+
+<!-- Category Modal View Start -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade"
+     id="category_view" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Categories</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                        type="button"></button>
+            </div>
+            <div class="modal-body">...</div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Category Modal View End -->
+
+</body>
+</html>
