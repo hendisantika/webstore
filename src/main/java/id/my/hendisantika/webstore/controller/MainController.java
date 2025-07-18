@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -250,5 +251,29 @@ public class MainController {
         m.addAttribute("title", user.getName() + " | StoreWala");
         m.addAttribute("user", user);
         return "profile";
+    }
+
+    @GetMapping("/checkout")
+    public String checkOut(Model m, Principal principal, HttpSession httpSession) {
+
+        if (principal == null) {
+            httpSession.setAttribute("status", "not-login");
+            return "redirect:/home";
+        }
+
+        int pinCode = new Random().nextInt(999999);
+
+        User user = this.userRepo.loadUserByUserName(principal.getName());
+
+        if (user.getRole().equals("ROLE_SELLER") || user.getRole().equals("ROLE_ADMIN")) {
+            httpSession.setAttribute("status",
+                    user.getRole().equals("ROLE_SELLER") ? "seller-not-allow" : "admin-not-allow");
+            return user.getRole().equals("ROLE_SELLER") ? "redirect:/seller/home" : "redirect:/admin/home";
+        }
+
+        m.addAttribute("user", user);
+        m.addAttribute("pincode", String.format("%06d", pinCode));
+        m.addAttribute("title", "Checkout | StoreWala");
+        return "checkout";
     }
 }
