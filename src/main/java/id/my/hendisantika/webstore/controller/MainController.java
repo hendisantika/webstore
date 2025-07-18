@@ -2,6 +2,7 @@ package id.my.hendisantika.webstore.controller;
 
 import id.my.hendisantika.webstore.entity.Category;
 import id.my.hendisantika.webstore.entity.Product;
+import id.my.hendisantika.webstore.entity.UnbanRequest;
 import id.my.hendisantika.webstore.entity.User;
 import id.my.hendisantika.webstore.repository.CategoryRepository;
 import id.my.hendisantika.webstore.repository.CommentRepository;
@@ -167,5 +168,19 @@ public class MainController {
                                  @RequestParam(name = "query", required = false) String query) {
 
         return "search_product";
+    }
+
+    /*
+     *                         EXPLANATION OF SEARCH METHOD
+     *
+     *  the above function is a method that handles request to the /search URL.
+     *  it displays all of the products related to the query and category.
+     */
+
+    @GetMapping("/unban-request")
+    public String unbanRequestView(Model m) {
+        m.addAttribute("title", "Unban Request | StoreWala");
+        m.addAttribute("unbanRequest", new UnbanRequest());
+        return "unban";
     }
 }
