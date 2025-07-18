@@ -183,4 +183,39 @@ public class MainController {
         m.addAttribute("unbanRequest", new UnbanRequest());
         return "unban";
     }
+
+    // unban request processing logic.
+
+    @PostMapping("/processing-unban-request")
+    public String processUnbanRequest(@Valid @ModelAttribute("unbanRequest") UnbanRequest unbanRequest,
+                                      BindingResult result, HttpSession httpSession) {
+
+        if (result.hasErrors()) {
+            return "unban";
+        }
+
+        boolean flag = false;
+
+        User user = this.userRepo.loadUserByUserName(unbanRequest.getEmail());
+
+        if (user == null) {
+            httpSession.setAttribute("status", "user-not-exist");
+            return "redirect:/unban-request?emailNotValid";
+        }
+
+        if (user.isEnable()) {
+            httpSession.setAttribute("status", "user-not-suspend");
+            return "redirect:/unban-request?userIsNotBanned";
+        }
+
+        this.unbanRequestRepo.save(unbanRequest);
+        flag = true;
+
+        if (flag) {
+            httpSession.setAttribute("status", "message-send-successfully");
+        }
+
+        return "redirect:/unban-request";
+    }
+
 }
