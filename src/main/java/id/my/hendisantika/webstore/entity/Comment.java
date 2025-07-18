@@ -24,9 +24,9 @@ import lombok.NoArgsConstructor;
  * Time: 14.59
  * To change this template use File | Settings | File Templates.
  */
-@Data
 @Entity
 @Table(name = "comments")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
