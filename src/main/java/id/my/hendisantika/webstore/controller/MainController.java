@@ -295,4 +295,33 @@ public class MainController {
         m.addAttribute("product", product);
         return "show_product";
     }
+
+    @PostMapping("/processingComment")
+    public String processComment(HttpSession httpSession,
+                                 @RequestParam(value = "comment", required = false) String comment,
+                                 @RequestParam(name = "user_id", required = false) Integer userId,
+                                 @RequestParam(value = "product_id", required = false) Integer productId) {
+
+        User user = this.userRepo.getById(userId);
+
+        boolean flag = false;
+
+        Comment cmnt = new Comment();
+
+        cmnt.setComment(comment);
+        cmnt.setCommentRelatedTo(productId);
+        cmnt.setUser(user);
+        cmnt.setDate(new Date());
+
+        this.commentRepo.save(cmnt);
+        flag = true;
+
+        if (flag) {
+            httpSession.setAttribute("status", "commented-successfully");
+            return "redirect:/showProduct?product_id=" + productId;
+        }
+
+        httpSession.setAttribute("status", "went-wrong");
+        return "redirect:/showProduct?product_id=" + productId;
+    }
 }
