@@ -1,6 +1,7 @@
 package id.my.hendisantika.webstore.controller;
 
 import id.my.hendisantika.webstore.entity.Category;
+import id.my.hendisantika.webstore.entity.Comment;
 import id.my.hendisantika.webstore.entity.Product;
 import id.my.hendisantika.webstore.entity.UnbanRequest;
 import id.my.hendisantika.webstore.entity.User;
@@ -275,5 +276,23 @@ public class MainController {
         m.addAttribute("pincode", String.format("%06d", pinCode));
         m.addAttribute("title", "Checkout | StoreWala");
         return "checkout";
+    }
+
+    @GetMapping("/showProduct")
+    public String productDetail(@RequestParam(name = "product_id", required = false) Integer id, Model m,
+                                Principal principal) {
+
+        List<Comment> comments = this.commentRepo.getAllComments(id);
+
+        if (principal != null) {
+            User user = this.userRepo.loadUserByUserName(principal.getName());
+            m.addAttribute("user", user);
+        }
+
+        Product product = this.productRepo.getById(id);
+
+        m.addAttribute("comments", comments);
+        m.addAttribute("product", product);
+        return "show_product";
     }
 }
