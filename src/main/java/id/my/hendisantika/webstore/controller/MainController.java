@@ -324,4 +324,32 @@ public class MainController {
         httpSession.setAttribute("status", "went-wrong");
         return "redirect:/showProduct?product_id=" + productId;
     }
+
+    /*
+     * Explanation of process comment method
+     *
+     * This above method is a method that handles requests to process a comment on a
+     * product. It has several parameters, including the current HTTP session, the
+     * comment text, the ID of the user who submitted the comment, and the ID of the
+     * product the comment is related to.
+     *
+     * The method first retrieves the user object from the database using the
+     * provided user ID, and then creates a new Comment object with the provided
+     * comment text, product ID, user, and current date. The method then saves the
+     * comment to the database and sets a flag to indicate that the comment was
+     * saved successfully.
+     *
+     * If the flag is set, the method sets an attribute in the HTTP session,
+     * redirects the user to the page for the product with the provided product ID,
+     * and appends a query parameter to the URL indicating that the comment was
+     * submitted successfully. Otherwise, the method sets an attribute in the HTTP
+     * session and redirects the user to the same page, but without the query
+     * parameter.
+     *
+     */
+
+    @GetMapping("/MyOrders")
+    public String orderStatus() {
+        return "order_status.html";
+    }
 }
