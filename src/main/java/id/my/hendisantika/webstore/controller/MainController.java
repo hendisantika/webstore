@@ -218,4 +218,37 @@ public class MainController {
         return "redirect:/unban-request";
     }
 
+    /*            EXPLANATION OF PROCESS UNBAN REQUEST METHOD
+	  This function is a controller method that handles a POST request to the "/processing-unban-request" URL.
+	  It is used to submit an unban request for a suspended user in the application.
+
+	  If the user input is not valid, return the user to the unban request page.
+
+	  Check if the user exists in the database. If they do not exist, set a status message
+	  and redirect the user to the unban request page.
+
+	  Check if the user is suspended. If they are not suspended, set a status message
+	  and redirect the user to the unban request page.
+
+	  Save the unban request to the database.
+
+	  If the unban request was saved successfully, set a status message to indicate success.
+
+	  Redirect the user to the unban request page.
+	*/
+
+    @GetMapping("/profile")
+    public String showProfile(Model m, Principal principal, HttpSession httpSession) {
+
+        if (principal == null) {
+            httpSession.setAttribute("status", "not-login");
+            return "redirect:/home";
+        }
+
+        User user = this.userRepo.loadUserByUserName(principal.getName());
+
+        m.addAttribute("title", user.getName() + " | StoreWala");
+        m.addAttribute("user", user);
+        return "profile";
+    }
 }
