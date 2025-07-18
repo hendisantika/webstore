@@ -2,6 +2,7 @@ package id.my.hendisantika.webstore.controller;
 
 import id.my.hendisantika.webstore.entity.Category;
 import id.my.hendisantika.webstore.entity.Product;
+import id.my.hendisantika.webstore.entity.User;
 import id.my.hendisantika.webstore.repository.CategoryRepository;
 import id.my.hendisantika.webstore.repository.CommentRepository;
 import id.my.hendisantika.webstore.repository.ProductRepository;
@@ -57,5 +58,12 @@ public class MainController {
         m.addAttribute("categories", categories);
         m.addAttribute("products", products);
         return "index.html";
+    }
+
+    @GetMapping("/register")
+    public String registerPage(Model m) {
+        m.addAttribute("title", "Register | StoreWala");
+        m.addAttribute("user", new User());
+        return "register";
     }
 }
