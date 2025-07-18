@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" th:replace="~{base::Layout(~{::body})}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Document</title>
+</head>
+<body>
+
+<br>
+<br>
+
+<div class="container">
+    <form action="/order/processing-order" class="row" method="POST">
+
+        <input name="user_id" th:value="${user.id}" type="hidden">
+
+        <div class="col-md-6 my-3">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h3 class="text-center fw-bold mb-3">Your Selected Items:</h3>
+                    <div class="cart-body"></div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="col-md-6 my-3">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h3 class="text-center fw-bold mb-3">Your Details for the
+                        Order</h3>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="floatingInput" readonly="readonly"
+                               th:value="${user.email}"> <label
+                            for="floatingInput">Email address</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="floatingInput" placeholder="John Doe"
+                               readonly="readonly" th:value="${user.name}"> <label
+                            for="floatingInput">Full Name</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input class="form-control" id="floatingInput" name="pincode"
+                               placeholder="Pin Code"
+                               readonly="readonly" th:value="${pincode}"> <label
+                            for="floatingInput">Pin code <span class="text-danger fs-10">(Generated automatically, you need to provide it to rider to confirm.)</span></label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" name="address" placeholder="Enter your Address"
+                                  required="required"></textarea>
+                        <label>Enter your address</label>
+                    </div>
+
+
+                    <button class="btn primary-background text-white col-8 offset-2" type="submit">Order Now</button>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+    </form>
+</div>
+
+
+</body>
+</html>
