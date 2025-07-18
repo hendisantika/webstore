@@ -2,8 +2,10 @@ package id.my.hendisantika.webstore.config;
 
 import id.my.hendisantika.webstore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,4 +24,9 @@ public class SecurityConfig {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
