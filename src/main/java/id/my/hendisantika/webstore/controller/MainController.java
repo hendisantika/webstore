@@ -8,13 +8,22 @@ import id.my.hendisantika.webstore.repository.CommentRepository;
 import id.my.hendisantika.webstore.repository.ProductRepository;
 import id.my.hendisantika.webstore.repository.UnbanRequestRepository;
 import id.my.hendisantika.webstore.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,4 +75,57 @@ public class MainController {
         m.addAttribute("user", new User());
         return "register";
     }
+
+    @PostMapping("/process-registration")
+    public String doRegister(@Valid @ModelAttribute("user") User user, BindingResult result, RedirectAttributes redir,
+                             @RequestParam("confirm_password") String confirmPassword, @RequestParam("user_role") String role, Model m,
+                             HttpSession httpSession) {
+
+        if (result.hasErrors()) {
+            m.addAttribute("user", user);
+            return "register";
+        }
+
+        if (role.equals("non-selected")) {
+            m.addAttribute("user", user);
+            httpSession.setAttribute("status", "role-not-select");
+            return "redirect:/register";
+        }
+
+        if (confirmPassword.equals("") || confirmPassword == null) {
+            m.addAttribute("user", user);
+            httpSession.setAttribute("status", "cp-empty");
+            return "redirect:/register";
+        }
+
+        if (!user.getPassword().equals(confirmPassword)) {
+            m.addAttribute("user", user);
+            httpSession.setAttribute("status", "cp-not-match");
+            return "redirect:/register";
+        }
+
+        try {
+            user.setRole(role.equals("customer") ? "ROLE_CUSTOMER" : "ROLE_SELLER");
+
+            user.setEnable(true);
+            user.setProfile("user.png");
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setDate(new Date());
+
+            this.userRepo.save(user);
+
+        } catch (DataIntegrityViolationException e) {
+            httpSession.setAttribute("status", "email-exist");
+            m.addAttribute("user", user);
+            return "redirect:/register";
+
+        } catch (Exception e) {
+            httpSession.setAttribute("status", "went-wrong");
+            e.printStackTrace();
+        }
+
+        httpSession.setAttribute("status", "registered-success");
+        return "redirect:/register";
+    }
+
 }
