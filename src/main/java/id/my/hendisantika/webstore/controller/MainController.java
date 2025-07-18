@@ -154,4 +154,18 @@ public class MainController {
         m.addAttribute("title", "Login | StoreWala");
         return "login";
     }
+
+    /*
+     * The above function is a method that handles requests to the /login URL. If
+     * the user is logged in, the function redirects them to a different URL
+     * depending on their role (e.g. /customer/home, /admin/home, or /seller/home).
+     * If the user is not logged in, the function adds an attribute to the Model
+     * object and returns a view that will likely render a login page for the user.
+     */
+    @GetMapping("/search")
+    public String searchProducts(@RequestParam(value = "category", required = false) Integer categoryType,
+                                 @RequestParam(name = "query", required = false) String query) {
+
+        return "search_product";
+    }
 }
