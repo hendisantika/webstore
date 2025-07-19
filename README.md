@@ -18,6 +18,7 @@ following technologies:
 - FSLightbox
 - TinyMCE
 - JavaScript
+- Testcontainers (for integration testing)
 
 The project includes the following modules:
 
@@ -58,7 +59,34 @@ log in:
 - Email: `admin@storewala.com`
 - Password: `admin`
 
-## Live View:
+## Testing
 
-go to: `https://ecommerce-sb.hariss.ga/`
-You can register/login there.
+This project uses Testcontainers for integration testing. Testcontainers is a Java library that supports JUnit tests,
+providing lightweight, throwaway instances of common databases, Selenium web browsers, or anything else that can run in
+a Docker container.
+
+### Running Tests
+
+To run the tests, you need to have Docker installed and running on your machine. Then, you can run the tests using
+Maven:
+
+```bash
+mvn test
+```
+
+### Test Containers
+
+The project includes the following test containers:
+
+- **MySQL Container**: Used for testing database interactions. The container is configured with the same version as the
+  production database (MySQL 8.0) and is automatically started and stopped for each test.
+
+The test containers are configured to:
+
+1. Start automatically before the tests run
+2. Configure themselves with appropriate settings (database name, username, password, etc.)
+3. Verify that they are running and healthy before executing the tests
+4. Clean up after themselves when the tests are complete
+
+This ensures that the tests run in an isolated environment that closely resembles the production environment, without
+affecting the actual production database.
