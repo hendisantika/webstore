@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 mysql_data
+.output.txt
 
 ### STS ###
 .apt_generated
