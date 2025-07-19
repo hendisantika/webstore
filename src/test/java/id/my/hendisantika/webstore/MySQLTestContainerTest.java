@@ -24,7 +24,7 @@ public class MySQLTestContainerTest {
 
     // Define the MySQL container with the same version as in compose.yaml
     @Container
-    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:8.0")
+    private static final MySQLContainer<?> mySQLContainer = new MySQLContainer<>("mysql:9.3.0")
             .withDatabaseName("test_shop_db")
             .withUsername("test_user")
             .withPassword("test_password")
